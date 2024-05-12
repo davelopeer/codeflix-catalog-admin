@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "0eafce9b-e31c-4fc3-9568-0ad306b808e1",
+		"name": "CodeFlix",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26719157"
+	},
+	"item": [
+		{
+			"name": "List Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8000/api/categories"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8000/api/categories/a73180cc-97dd-4d74-a71d-d3541ccb7b96"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Categories",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Séries\",\n    \"description\": \"Descrição de séries\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/categories/"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Category",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": "http://localhost:8000/api/categories/f615b58a-cf61-4484-8b5b-c07d0af6859e"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Category",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8000/api/categories/f615b58a-cf61-4484-8b5b-c07d0af6859e/"
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Update Category",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Série\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/api/categories/3df1b742-1664-466f-9a27-f0db29f72488/"
+			},
+			"response": []
+		}
+	]
+}
