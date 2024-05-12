@@ -26,7 +26,7 @@ def category_repository() ->DjangoORMCategoryRepository:
     return DjangoORMCategoryRepository()
 
 @pytest.mark.django_db
-class TestCategoryAPI:
+class TestListCategoryAPI:
     def test_list_categories(
             self,
             category_movie: Category,
@@ -194,7 +194,6 @@ class TestUpdateAPI:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-
 @pytest.mark.django_db
 class TestDeleteAPI:
     def test_when_id_is_invalid_then_retrun_400(self) -> None:
@@ -224,3 +223,98 @@ class TestDeleteAPI:
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert category_repository.list() == []
 
+
+@pytest.mark.django_db
+class TestPartialUpdateAPI:
+    def test_when_id_is_invalid_then_return_400(self) -> None:
+        url = f'/api/categories/123123123/'
+        response = APIClient().patch(
+            url,
+            data={
+                'name': 'Movie',
+                'description': 'Movie description',
+            }
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == {
+            'id': ['Must be a valid UUID.'],
+        }
+
+    def test_when_only_name_is_provided_then_return_204(
+        self,
+        category_movie: Category,
+        category_repository: DjangoORMCategoryRepository,    
+    ) -> None:
+        category_repository.save(category_movie)
+
+        url = f'/api/categories/{category_movie.id}/'
+        response = APIClient().patch(
+            url,
+            data={
+                'name': 'Series',
+            }
+        )
+
+        updated_category = category_repository.get_by_id(id=category_movie.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert updated_category.name == 'Series'
+        assert updated_category.description == 'Movie description'
+        assert updated_category.is_active is True
+
+
+    def test_when_only_description_is_provided_then_return_204(
+        self,
+        category_movie: Category,
+        category_repository: DjangoORMCategoryRepository,    
+    ) -> None:
+        category_repository.save(category_movie)
+
+        url = f'/api/categories/{category_movie.id}/'
+        response = APIClient().patch(
+            url,
+            data={
+                'description': 'Series description',
+            }
+        )
+
+        updated_category = category_repository.get_by_id(id=category_movie.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert updated_category.name == 'Movie'
+        assert updated_category.description == 'Series description'
+        assert updated_category.is_active is True
+
+    def test_when_only_is_active_is_provided_then_return_204(
+        self,
+        category_movie: Category,
+        category_repository: DjangoORMCategoryRepository,    
+    ) -> None:
+        category_repository.save(category_movie)
+
+        url = f'/api/categories/{category_movie.id}/'
+        response = APIClient().patch(
+            url,
+            data={
+                'is_active': False,
+            }
+        )
+
+        updated_category = category_repository.get_by_id(id=category_movie.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert updated_category.name == 'Movie'
+        assert updated_category.description == 'Movie description'
+        assert updated_category.is_active is False
+
+    def test_when_category_doesnt_exist_return_404(self) -> None:
+        url = f'/api/categories/{uuid.uuid4()}/'
+        response = APIClient().patch(
+            url,
+            data={
+                'name': 'Series',
+            }
+        )
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
