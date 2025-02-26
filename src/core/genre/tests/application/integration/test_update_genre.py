@@ -1,7 +1,7 @@
 import uuid
 import pytest
 
-from src.core.genre.application.exceptions import GenreNotFound, InvalidGenre
+from src.core.genre.application.exceptions import GenreNotFound, InvalidGenre, RelatedCategoriesNotFound
 from src.core.category.domain.category_repository import CategoryRepository
 from src.core.category.infra.in_memory_category_repository import InMemoryCategoryRepository
 from src.core.genre.application.use_cases.update_genre import UpdateGenre
@@ -226,3 +226,30 @@ class TestUpdateGenre:
 
         with pytest.raises(InvalidGenre):
             use_case.execute(input) 
+
+    def test_should_raise_exception_if_genre_has_inexistent_category_id(
+            self,
+            movie_category,
+            category_repository
+        ):
+        genre = Genre(
+            name='Action',
+            categories={movie_category.id}
+        )
+        genre_repository = InMemoryGenreRepository()
+        genre_repository.save(genre)
+
+        use_case = UpdateGenre(
+            repository=genre_repository,
+            category_repository=category_repository
+        )
+
+        invalid_genre_id = uuid.uuid4()
+        input = UpdateGenre.Input(
+            name='Drama',
+            id=genre.id,
+            categories_ids={invalid_genre_id}
+        )
+
+        with pytest.raises(RelatedCategoriesNotFound):
+            use_case.execute(input)
