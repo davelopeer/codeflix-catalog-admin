@@ -150,3 +150,11 @@ class TestRemoveCategory:
 
         genre.remove_category(category_id)
         assert category_id not in genre.categories
+
+class TestCleanCategories:
+    def test_clean_all_categories(self):
+        category_id = uuid4()
+        genre = Genre(name='Romance', categories={category_id})
+
+        genre.clean_categories()
+        assert genre.categories == set()
