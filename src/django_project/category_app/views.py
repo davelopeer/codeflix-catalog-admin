@@ -10,7 +10,7 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from django_project.category_app.repository import DjangoORMCategoryRepository
+from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from src.core.category.application.use_cases.create_category import CreateCategory, CreateCategoryRequest
 from src.core.category.application.use_cases.delete_category import DeleteCategory, DeleteCategoryRequest
 from src.core.category.application.use_cases.list_category import (
