@@ -88,56 +88,45 @@ class TestListAPI:
         assert response.data["data"][1]["categories"] == []
 
 
-# @pytest.mark.django_db
-# class TestCreateAPI:
-#     def test_when_request_data_is_valid_then_create_genre(
-#         self,
-#         category_repository: DjangoORMCategoryRepository,
-#         category_movie: Category,
-#         genre_repository: DjangoORMGenreRepository,
-#     ) -> None:
-#         category_repository.save(category_movie)
+@pytest.mark.django_db
+class TestCreateAPI:
+    def test_create_genre_with_associated_categories(
+            self,
+            category_movie,
+            category_documentary,
+            category_repository: DjangoORMCategoryRepository,
+            genre_repository: DjangoORMGenreRepository,
+    ):
+        category_repository.save(category_movie)
+        category_repository.save(category_documentary)
 
-#         url = "/api/genres/"
-#         data = {
-#             "name": "Romance",
-#             "categories": [category_movie.id],
-#         }
-#         response = APIClient().post(url, data=data)
+        url = "/api/genres/"
+        data = {
+            "name": "Drama",
+            "category_ids": [
+                str(category_documentary.id),
+                str(category_movie.id),
+            ]
+        }
 
-#         assert response.status_code == status.HTTP_201_CREATED
-#         assert response.data["id"]
+        response = APIClient().post(url, data)
 
-#         saved_genre = genre_repository.get_by_id(response.data["id"])
-#         assert saved_genre == Genre(
-#             id=UUID(response.data["id"]),
-#             name="Romance",
-#             is_active=True,
-#             categories={category_movie.id},
-#         )
+        assert response.status_code == 201
+        assert response.data["id"]
+        created_genre_id = response.data["id"]
 
-#     def test_when_request_data_is_invalid_then_return_400(self) -> None:
-#         url = "/api/genres/"
-#         data = {
-#             "name": "",
-#         }
-#         response = APIClient().post(url, data=data)
+        saved_genre = genre_repository.get_by_id(created_genre_id)
+        assert saved_genre.name == "Drama"
+        assert saved_genre.categories == {
+            category_documentary.id,
+            category_movie.id,
+        }
 
-#         assert response.status_code == status.HTTP_400_BAD_REQUEST
-#         assert response.data == {"name": ["This field may not be blank."]}
+    def test_create_genre_should_throw_exception_with_invalid_genre(self):
+        pass
 
-#     def test_when_related_categories_do_not_exist_then_return_400(
-#         self,
-#     ) -> None:
-#         url = "/api/genres/"
-#         data = {
-#             "name": "Romance",
-#             "categories": [uuid4()],
-#         }
-#         response = APIClient().post(url, data=data)
-
-#         assert response.status_code == status.HTTP_400_BAD_REQUEST
-#         assert "Categories with provided IDs not found" in response.data["error"]
+    def test_create_genre_should_throw_exception_with_invalid_categories(self):
+        pass
 
 
 # @pytest.mark.django_db

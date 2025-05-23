@@ -3,7 +3,7 @@
 import pytest
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from src.django_project.category_app.models import Category as CategoryModel
-from core.category.domain.category import Category
+from src.core.category.domain.category import Category
 
 
 @pytest.mark.django_db

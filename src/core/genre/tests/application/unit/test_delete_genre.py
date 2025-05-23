@@ -3,8 +3,8 @@ from unittest.mock import create_autospec
 import uuid
 
 import pytest
-from core.genre.application.exceptions import GenreNotFound
-from core.genre.application.use_cases.delete_genre import DeleteGenre
+from src.core.genre.application.exceptions import GenreNotFound
+from src.core.genre.application.use_cases.delete_genre import DeleteGenre
 from src.core.genre.domain.genre import Genre
 from src.core.genre.domain.genre_repository import GenreRepository
 

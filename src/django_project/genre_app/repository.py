@@ -25,7 +25,9 @@ class DjangoORMGenreRepository(GenreRepository):
             return None
         
         return Genre(
-            **genre_model,
+            id=genre_model.id,
+            name=genre_model.name,
+            is_active=genre_model.is_active,
             categories={category.id for category in genre_model.categories.all()}
         )
 
