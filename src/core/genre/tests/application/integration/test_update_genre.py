@@ -81,7 +81,7 @@ class TestUpdateGenre:
 
         input = UpdateGenre.Input(
             id=genre.id,
-            categories_ids={documentary_category.id}
+            categories={documentary_category.id}
         )
 
         use_case.execute(input)
@@ -143,7 +143,7 @@ class TestUpdateGenre:
             id=genre.id,
             name='Drama',
             is_active=True,
-            categories_ids={series_category.id, documentary_category.id}
+            categories={series_category.id, documentary_category.id}
         )
 
         use_case.execute(input)
@@ -167,10 +167,10 @@ class TestUpdateGenre:
             id=uuid.uuid4(),
             name='Drama',
             is_active=True,
-            categories_ids={series_category.id}
+            categories={series_category.id}
         )
 
-        with pytest.raises(GenreNotFound, match='Category with id .* not found'):
+        with pytest.raises(GenreNotFound, match='Genre with id .* not found'):
             use_case.execute(input)
 
     def test_should_raise_exception_if_name_is_invalid(
@@ -194,7 +194,7 @@ class TestUpdateGenre:
             id=genre.id,
             name='1'*256,
             is_active=True,
-            categories_ids={movie_category.id}
+            categories={movie_category.id}
         )
 
         with pytest.raises(InvalidGenre):
@@ -221,7 +221,7 @@ class TestUpdateGenre:
             id=genre.id,
             name='',
             is_active=True,
-            categories_ids={movie_category.id}
+            categories={movie_category.id}
         )
 
         with pytest.raises(InvalidGenre):
@@ -248,7 +248,7 @@ class TestUpdateGenre:
         input = UpdateGenre.Input(
             name='Drama',
             id=genre.id,
-            categories_ids={invalid_genre_id}
+            categories={invalid_genre_id}
         )
 
         with pytest.raises(RelatedCategoriesNotFound):

@@ -20,7 +20,7 @@ class TestDeleteGenre:
         mock_genre_repository.get_by_id.return_value = genre
         
         use_case = DeleteGenre(repository=mock_genre_repository)
-        use_case.execute(input=DeleteGenre.InputDeleteGenre(id=genre.id))
+        use_case.execute(input=DeleteGenre.Input(id=genre.id))
 
         mock_genre_repository.delete.assert_called_once_with(genre.id)
 
@@ -33,6 +33,6 @@ class TestDeleteGenre:
         use_case = DeleteGenre(repository=mock_genre_repository)
 
         with pytest.raises(GenreNotFound, match="Genre with .* not found"):
-            use_case.execute(input=DeleteGenre.InputDeleteGenre(id=uuid.uuid4()))
+            use_case.execute(input=DeleteGenre.Input(id=uuid.uuid4()))
         
         mock_genre_repository.delete.assert_not_called()

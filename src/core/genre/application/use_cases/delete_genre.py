@@ -13,10 +13,10 @@ class DeleteGenre:
         self.repository = repository
 
     @dataclass
-    class InputDeleteGenre:
+    class Input:
         id: UUID
 
-    def execute(self, input: InputDeleteGenre) -> None:
+    def execute(self, input: Input) -> None:
         genre = self.repository.get_by_id(id=input.id)
 
         if genre is None:

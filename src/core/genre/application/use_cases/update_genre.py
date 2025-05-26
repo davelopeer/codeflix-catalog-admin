@@ -19,7 +19,7 @@ class UpdateGenre:
     class Input:
         id: UUID
         name: str | None = None
-        categories_ids: set[UUID] | None = None
+        categories: set[UUID] | None = None
         is_active: bool | None = None
 
 
@@ -27,7 +27,7 @@ class UpdateGenre:
         genre = self.repository.get_by_id(input.id)
 
         if genre is None:
-            raise GenreNotFound(f'Category with id {input.id} not found')
+            raise GenreNotFound(f'Genre with id {input.id} not found')
 
         current_name = genre.name
 
@@ -47,15 +47,15 @@ class UpdateGenre:
             raise InvalidGenre(err)
         
         # Handling categories ids
-        if input.categories_ids:
+        if input.categories:
             category_ids = {category.id for category in self.category_repository.list()}
-            if not input.categories_ids.issubset(category_ids):
+            if not input.categories.issubset(category_ids):
                 raise RelatedCategoriesNotFound(
-                    f'Categories not found: {input.categories_ids - category_ids}')
+                    f"Categories with provided IDs not found: {input.categories - category_ids}")
 
         current_categories = genre.categories
-        if input.categories_ids is not None:
-            current_categories = input.categories_ids
+        if input.categories is not None:
+            current_categories = input.categories
 
         try:
             genre.clean_categories()

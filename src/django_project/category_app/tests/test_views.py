@@ -22,7 +22,7 @@ def category_documentary():
     )
 
 @pytest.fixture
-def category_repository() ->DjangoORMCategoryRepository:
+def category_repository() -> DjangoORMCategoryRepository:
     return DjangoORMCategoryRepository()
 
 @pytest.mark.django_db

@@ -46,7 +46,7 @@ class DjangoORMGenreRepository(GenreRepository):
 
     def update(self, genre: Genre) -> None:
         try:
-            genre_model = GenreORM.objects.get(id=id)
+            genre_model = GenreORM.objects.get(id=genre.id)
         except GenreORM.DoesNotExist:
             return None
         
