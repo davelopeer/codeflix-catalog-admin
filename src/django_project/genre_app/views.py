@@ -65,3 +65,26 @@ class GenreViewSet(viewsets.ViewSet):
             return Response(status=HTTP_404_NOT_FOUND)
 
         return Response(status=HTTP_204_NO_CONTENT)
+
+    def update(self, request: Request, pk=None) -> Response:
+        serializer = UpdateGenreRequestSerializer(
+            data={
+                **request.data,
+                'id':pk,
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+
+        input = UpdateGenre.Input(**serializer.validated_data)
+        use_case = UpdateGenre(
+            repository=DjangoORMGenreRepository(),
+            category_repository=DjangoORMCategoryRepository()
+        )
+        try:
+            output = use_case.execute(input)
+        except GenreNotFound:
+            return Response(status=HTTP_404_NOT_FOUND)
+        except RelatedCategoriesNotFound as err:
+            return Response(status=HTTP_400_BAD_REQUEST, data={"error": str(err)})
+
+        return Response(status=HTTP_204_NO_CONTENT)
