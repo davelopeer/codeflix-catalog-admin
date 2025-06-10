@@ -1,13 +1,16 @@
-from abc import ABC
+from abc import ABC, abstractmethod
+from uuid import UUID
+
+from src.core.castmembers.domain.castmember import CastMember
 
 
 class CastMemberRepository(ABC):
     @abstractmethod
-    def save(self, category: CastMember):
+    def save(self, castmember: CastMember):
         raise NotImplementedError
     
     @abstractmethod
-    def delete(self, id: CastMember) -> None:
+    def delete(self, id: UUID) -> None:
         raise NotImplementedError
 
     @abstractmethod
