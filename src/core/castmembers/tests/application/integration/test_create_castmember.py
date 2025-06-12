@@ -22,10 +22,10 @@ class TestCreateCastMember:
         assert response is not None
         assert isinstance(response, CreateCastMemberResponse)
         assert isinstance(response.id, UUID)
-        assert len(repository.categories) == 1
-        assert repository.categories[0].id == response.id
-        assert repository.categories[0].name == "Adriana Esteves"
-        assert repository.categories[0].type == CastMemberType.ACTOR
+        assert len(repository.cast_members) == 1
+        assert repository.cast_members[0].id == response.id
+        assert repository.cast_members[0].name == "Adriana Esteves"
+        assert repository.cast_members[0].type == CastMemberType.ACTOR
 
     def test_create_cast_member_with_invalid_type(self):
         repository = InMemoryCastMemberRepository()

@@ -4,22 +4,22 @@ from src.core.castmembers.domain.castmember import CastMember
 
 
 class InMemoryCastMemberRepository(CastMemberRepository):
-    def __init__(self, categories: list[CastMember] = None) -> None:
-        self.categories: list[CastMember] = categories or []
+    def __init__(self, cast_members: list[CastMember] = None) -> None:
+        self.cast_members: list[CastMember] = cast_members or []
 
-    def save(self, category: CastMember) -> None:
-        self.categories.append(category)
+    def save(self, cast_member: CastMember) -> None:
+        self.cast_members.append(cast_member)
 
     def delete(self, id: UUID) -> None:
-        category = self.get_by_id(id)
-        if category:
-            self.categories.remove(category)
+        cast_member = self.get_by_id(id)
+        if cast_member:
+            self.cast_members.remove(cast_member)
 
-    def update(self, category: CastMember) -> None:
-        old_category = self.get_by_id(category.id)
-        if old_category:
-            self.categories.remove(old_category)
-            self.categories.append(category)
+    def update(self, cast_member: CastMember) -> None:
+        old_cast_member = self.get_by_id(cast_member.id)
+        if old_cast_member:
+            self.cast_members.remove(old_cast_member)
+            self.cast_members.append(cast_member)
 
     def list(self) -> list[CastMember]:
-        return [category for category in self.categories]
+        return [cast_member for cast_member in self.cast_members]
