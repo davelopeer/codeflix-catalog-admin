@@ -1,13 +1,10 @@
 import uuid
 import pytest
-from unittest.mock import create_autospec
 
-
-from core.castmembers.infra.in_memory_castmember_repository import InMemoryCastMemberRepository
+from src.core.castmembers.infra.in_memory_castmember_repository import InMemoryCastMemberRepository
 from src.core.castmembers.application.exceptions import CastMemberNotFound
 from src.core.castmembers.application.use_cases.delete_castmembers import DeleteCastMember, DeleteCastMemberRequest
 from src.core.castmembers.domain.castmember import CastMember, CastMemberType
-from src.core.castmembers.domain.castmember_repository import CastMemberRepository
 
 
 class TestDeleteCastMember:

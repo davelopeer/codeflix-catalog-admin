@@ -2,7 +2,6 @@ import uuid
 import pytest
 from unittest.mock import create_autospec
 
-
 from src.core.castmembers.application.exceptions import CastMemberNotFound
 from src.core.castmembers.application.use_cases.delete_castmembers import DeleteCastMember, DeleteCastMemberRequest
 from src.core.castmembers.domain.castmember import CastMember, CastMemberType
