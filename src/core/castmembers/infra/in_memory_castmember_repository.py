@@ -10,6 +10,13 @@ class InMemoryCastMemberRepository(CastMemberRepository):
     def save(self, cast_member: CastMember) -> None:
         self.cast_members.append(cast_member)
 
+
+    def get_by_id(self, id: UUID) -> CastMember | None:
+        for cast_member in self.cast_members:
+            if cast_member.id == id:
+                return cast_member
+        return None
+
     def delete(self, id: UUID) -> None:
         cast_member = self.get_by_id(id)
         if cast_member:
