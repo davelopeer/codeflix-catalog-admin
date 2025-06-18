@@ -21,8 +21,10 @@ from rest_framework.routers import DefaultRouter
 
 from src.django_project.genre_app.views import GenreViewSet
 from src.django_project.category_app.views import CategoryViewSet
+from src.django_project.castmember_app.views import CastMemberViewSet
 
 router = DefaultRouter()
+router.register(r'api/castmembers', CastMemberViewSet, basename='castmembers')
 router.register(r'api/categories', CategoryViewSet, basename='category')
 router.register(r'api/genres', GenreViewSet, basename='genre')
 
