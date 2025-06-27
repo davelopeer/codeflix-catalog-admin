@@ -1,13 +1,13 @@
-from uuid import UUID, uuid4
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+
+from src.core._shared.entity import Entity
 
 
 @dataclass
-class Category:
+class Category(Entity):
     name: str
     description: str = ''
     is_active: bool = True
-    id: UUID = field(default_factory=uuid4) # call uuid4() everytime a new instance is created
 
     def __post_init__(self):
         self._validate()
@@ -18,17 +18,18 @@ class Category:
     def __repr__(self):
         return f"Category {self.name} ({self.id})"
     
-    def __eq__(self, other):
-        if not isinstance(other, Category):
-            return False
-        return self.id == other.id
-    
     def _validate(self):
         if len(self.name) > 255:
-            raise ValueError('name cannot be longer than 255')
+            self.notification.add_error('name cannot be longer than 255')
 
         if not self.name:
-            raise ValueError('name cannot be empty')
+            self.notification.add_error('name cannot be empty')
+
+        if len(self.description) > 1024:
+            self.notification.add_error('description cannot be longer than 1024')
+
+        if self.notification.has_errors:
+            raise ValueError(self.notification.messages)
 
     def update_category(self, name, description):
         self.name = name

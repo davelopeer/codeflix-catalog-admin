@@ -61,6 +61,14 @@ class TestCategory:
         with pytest.raises(ValueError, match='name cannot be empty'):
             Category(name='')
 
+    def test_description_must_have_less_than_1024_characters(self):
+        with pytest.raises(ValueError, match='description cannot be longer than 1024'):
+            Category(name='Filme', description='*'*1025)
+
+    def test_description_longer_than_1024_and_name_longer_than_255(self):
+        with pytest.raises(ValueError, match='name cannot be longer than 255; description cannot be longer than 1024'):
+            Category(name='*'*256, description='*'*1025)
+
 
 class TestUpdateCategory:
 

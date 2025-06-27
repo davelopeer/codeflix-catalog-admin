@@ -2,6 +2,8 @@ from enum import StrEnum
 from uuid import UUID, uuid4
 from dataclasses import dataclass, field
 
+from src.core._shared.entity import Entity
+
 
 class CastMemberType(StrEnum):
     ACTOR = "ATOR"
@@ -9,10 +11,9 @@ class CastMemberType(StrEnum):
 
 
 @dataclass
-class CastMember:
+class CastMember(Entity):
     name: str
     type: CastMemberType
-    id: UUID = field(default_factory=uuid4)
 
     def __post_init__(self):
         self._validate()
@@ -25,15 +26,18 @@ class CastMember:
 
     def _validate(self):
         if len(self.name) > 255:
-            raise ValueError('CastMember name cannot be longer than 255')
+            self.notification.add_error('CastMember name cannot be longer than 255')
 
         if not self.name:
-            raise ValueError('CastMember name cannot be empty')
+            self.notification.add_error('CastMember name cannot be empty')
 
         try:
-            self.type = CastMemberType(self.type)
+            CastMemberType(self.type)
         except ValueError:
-            raise ValueError('invalid type for CastMember')
+            self.notification.add_error('invalid type for CastMember')
+        
+        if self.notification.has_errors:
+            raise ValueError(self.notification.messages)
         
     def update_cast_member(self, name: str = None, type: CastMemberType = None):
         if name:
