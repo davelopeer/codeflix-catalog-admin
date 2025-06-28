@@ -6,7 +6,7 @@ from rest_framework import status
 
 @pytest.mark.django_db
 class TestE2ECastMember:
-    def test_user_can_create_and_edit_and_delete_category(self) -> None:
+    def test_user_can_create_and_edit_and_delete_cast_member(self) -> None:
         api_client = APIClient()
         url = "/api/castmembers/"
 
